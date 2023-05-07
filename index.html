@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Atlas breach check</title>
+</head>
+
+<body>
+    Check if your IP address was leaked in the May 2023 AtlasMC breach<br>
+    <label for="username">Minecraft username</label>
+    <input id="username">
+    <button id="check">Check</button>
+    <p id="result"></p>
+    <script>
+        'use strict';
+        async function digestMessage(message) {
+            const msgUint8 = new TextEncoder().encode(message); // encode as (utf-8) Uint8Array
+            const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8); // hash the message
+            const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
+            const hashHex = hashArray
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join(""); // convert bytes to hex string
+            return hashHex;
+        }
+
+        (async () => {
+            let usernames = (await fetch("https://gist.githubusercontent.com/pandaninjas/fb3f65edd830e4d66769e426c2b43600/raw").then(res => res.text())).split("\n");
+            let button = document.getElementById("check");
+            button.onclick =
+                async (ev) => {
+                    let hash = await digestMessage(document.getElementById("username").value);
+                    if (usernames.indexOf(hash) >= 0) {
+                        document.getElementById("result").innerText = "Your username was found";
+                    } else {
+                        document.getElementById("result").innerText = "Your username was not found";
+                    }
+                }
+        })().catch(console.error)
+    </script>
+</body>
+
+</html>
