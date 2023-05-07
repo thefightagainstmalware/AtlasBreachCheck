@@ -25,7 +25,7 @@
         }
 
         (async () => {
-            let usernames = (await fetch("https://gist.github.com/pandaninjas/381c3e62594a65b0b1948303cfe1ebf5/raw").then(res => res.text())).split("\n");
+            let usernames = (await fetch("https://gist.githubusercontent.com/pandaninjas/381c3e62594a65b0b1948303cfe1ebf5/raw").then(res => res.text())).split("\n");
             let button = document.getElementById("check");
             button.onclick =
                 async (ev) => {
