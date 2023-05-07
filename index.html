@@ -13,6 +13,7 @@
     <p id="result"></p>
     <script>
         'use strict';
+
         async function digestMessage(message) {
             const msgUint8 = new TextEncoder().encode(message); // encode as (utf-8) Uint8Array
             const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8); // hash the message
@@ -24,11 +25,11 @@
         }
 
         (async () => {
-            let usernames = (await fetch("https://gist.githubusercontent.com/pandaninjas/fb3f65edd830e4d66769e426c2b43600/raw").then(res => res.text())).split("\n");
+            let usernames = (await fetch("https://gist.github.com/pandaninjas/381c3e62594a65b0b1948303cfe1ebf5/raw").then(res => res.text())).split("\n");
             let button = document.getElementById("check");
             button.onclick =
                 async (ev) => {
-                    let hash = await digestMessage(document.getElementById("username").value);
+                    let hash = await digestMessage(document.getElementById("username").value.toLowerCase());
                     if (usernames.indexOf(hash) >= 0) {
                         document.getElementById("result").innerText = "Your username was found";
                     } else {
